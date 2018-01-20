@@ -3,6 +3,7 @@
  */
 import User from './Entities/User'
 
+// SOME SALT AND HASHING WILL BE NICE
 
 export const localStrategy = (username, password, done) => {
     User.findOne({ username : username},function(err,user){

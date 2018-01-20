@@ -1,11 +1,19 @@
-import fetch from 'isomorphic-fetch'
+//import fetch from 'isomorphic-fetch'
+import IsomorphicFetch from './real-isomorphic-fetch/index'
+import fetch from 'node-fetch'
+import {URL_DOMAIN, URLS} from './constants'
+const fetchInstance = new IsomorphicFetch(fetch)
 
 const parseResponse = response => response.json()
 
 const logError = error => console.error(error)
 
 const fetchThenDispatch = (dispatch, url, method, body) =>
-    fetch(url, {method, body, headers: { 'Content-Type': 'application/json' }})
+    fetchInstance(`${URL_DOMAIN}${url}`, {
+        method,
+        body,
+        headers: {'Accept': 'application/json', 'Content-Type': 'application/json'}
+    })
         .then(parseResponse)
         .then(dispatch)
         .catch(logError)
@@ -31,4 +39,21 @@ export const rateColor = (id, rating) => dispatch =>
         `/color/${id}`,
         'PUT',
         JSON.stringify({rating})
+    )
+
+export const addProject = (title, description) => dispatch =>
+    fetchThenDispatch(
+        dispatch,
+        '/projects',
+        'POST',
+        JSON.stringify({title, description})
+    )
+
+
+export const register = (email, password, firstName, lastName, manager) => dispatch =>
+    fetchThenDispatch(
+        dispatch,
+        '/register',
+        'POST',
+        JSON.stringify({email, password, firstName, lastName, manager})
     )

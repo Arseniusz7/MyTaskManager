@@ -9,6 +9,7 @@ const store = storeFactory(false, window.__INITIAL_STATE__)
 
 window.React = React
 
+
 console.log('rendered from here...')
 
 hydrate(

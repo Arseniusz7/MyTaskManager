@@ -13,12 +13,12 @@ class Color extends Component {
         return (
             <section className="color" style={this.style}>
                 <h1 ref="title"
-                    onClick={() => history.push(`/${id}`)}>{title}</h1>
+                    onClick={() => history.push(`/app/${id}`)}>{title}</h1>
                 <button onClick={onRemove}>
                     <FaTrash />
                 </button>
                 <div className="color"
-                     onClick={() => history.push(`/${id}`)}
+                     onClick={() => history.push(`/app/${id}`)}
                      style={{ backgroundColor: color }}>
                 </div>
                 <TimeAgo timestamp={timestamp} />

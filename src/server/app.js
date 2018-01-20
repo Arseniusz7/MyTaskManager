@@ -13,6 +13,7 @@ import passportRouter from './passportRouter'
 import App from '../components/App'
 import storeFactory from '../store'
 import initialState from '../../data/initialState.json'
+import {URLS, SESSION_SECRET} from './../constants'
 
 const staticCSS = fs.readFileSync(path.join(__dirname, '../../dist/assets/bundle.css'))
 const fileAssets = express.static(path.join(__dirname, '../../dist/assets'))
@@ -30,71 +31,11 @@ db.once('open', function(){
     console.warn("Db is open...");
 });
 
+
+
 const serverStore = storeFactory(true, initialState)
 
-serverStore.subscribe(() =>
-    fs.writeFile(
-        path.join(__dirname, '../../data/initialState.json'),
-        JSON.stringify(serverStore.getState()),
-        error => (error) ? console.log("Error saving state!", error) : null
-    )
-)
-
-const RegisterHtml = () =>`
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="minimum-scale=1.0, width=device-width, maximum-scale=1.0, user-scalable=no" />
-    <meta charset="utf-8">
-        <title>Register</title>
-</head>
-<body>
-<h4>Register your account</h4>
-<div>
-    <form action="/register" method="post">
-        <div>
-            <label for="email">Email</label>
-            <input type="email" name="email" placeholder="Your Email"/>
-        </div>
-        <div>
-            <label for="password">Password</label>
-            <input type="password" name="password" placeholder="Your Password"/>
-        </div>
-        <div>
-            <label for="firstName">First name</label>
-            <input type="text" name="firstName" placeholder="Your first name"/>
-        </div>
-        <div>
-            <label for="lastName">Last name</label>
-            <input type="text" name="lastName" placeholder="Your last name"/>
-        </div>
-        <div>
-            <input type="checkbox" name="manager" value="true">
-            <label for="manager">Are you manager?</label>
-        </div>
-        <input type="submit" value="Register"/>
-    </form>
-</div>
-<h4>Log in</h4>
-<div>
-    <form action="/login" method="post">
-        <div>
-            <label for="email">Email</label>
-            <input type="email" name="email" placeholder="Your Email"/>
-        </div>
-        <div>
-            <label for="password">Password</label>
-            <input type="password" name="password" placeholder="Your Password"/>
-        </div>
-        <input type="submit" value="Log in"/>
-    </form>
-</div>
-</body>
-</html>
-`
-
-
-const buildHTMLPage = ({html, state, css}) => `
+const buildHTMLPage = ({html, state, url, css}) => `
 <!DOCTYPE html>
 <html>
     <head>
@@ -115,6 +56,7 @@ const buildHTMLPage = ({html, state, css}) => `
 
 const renderComponentsToHTML = ({url, store}) =>
     ({
+        url: url,
         state: store.getState(),
         html: renderToString(
             <Provider store={store}>
@@ -137,23 +79,51 @@ const htmlResponse = compose(
     makeClientStoreFrom(serverStore)
 )
 
-const resp7 = (req, res) => {
-    console.warn(req.user)
-    if(!res.headersSent)
-        res.status(200).send(
-            htmlResponse(req.url)
-        )
-}
+const redirectAuth = (req, res) =>
+    (req.url === '/' || req.url === URLS.REGISTER || req.url === URLS.LOGIN) ?
+        res.redirect('/app') :
+        res.status(200).send(htmlResponse(req.url))
+
+const redirectUnauth = (req, res) =>
+    (req.url !== '/' && req.url !== URLS.REGISTER && req.url !== URLS.LOGIN) ?
+        res.redirect('/') :
+        res.status(200).send(htmlResponse(req.url))
 
 const respond = (req, res, next) =>
-    req.isAuthenticated() ?
-        resp7(req, res) :
-        res.status(200).send(RegisterHtml())
+    (!res.headersSent)
+        ? (req.session.passport && req.session.passport.user) ?
+                redirectAuth(req, res) :
+                redirectUnauth(req, res)
+        : null
 
 
+import Cookies from 'cookies'
+import jwt from 'jsonwebtoken'
 
 const logger = (req, res, next) => {
+    let token = new Cookies(req,res).get('access_token')
+    if (token) {
+        // verifies secret and checks exp
+        jwt.verify(token, '12345-67890-09876-54321', function (err, decoded) {
+            if (err) {
+                let err = new Error('You are not authenticated!');
+                err.status = 401;
+                return next(err);
+            } else {
+                console.log(decoded)
+                // if everything is good, save to request for use in other routes
+                req.decoded = decoded;
+                //console.log('fa', name);
+
+            }
+        });
+    }
     console.log(`${req.method} request for '${req.url}'.`)
+    console.log(`Got a token: ${token}`)
+    if(req.session.passport && req.session.passport.user)
+        console.log(`User: ${req.session.passport.user}`)
+    else
+        console.log('Unauthorized')
     next()
 }
 
@@ -161,16 +131,6 @@ const addStoreToRequestPipeline = (req, res, next) => {
     req.store = serverStore
     next()
 }
-
-import { Router } from 'express'
-
-const routerMain = Router()
-
-routerMain.get("/", (req, res) =>
-    res.status(200).send(
-        htmlResponse(req.url)
-    )
-)
 
 passport.use(new LocalStrategy.Strategy({
     usernameField: 'email',
@@ -187,7 +147,7 @@ export default express()
         extended: true
     }))
     .use(bodyParser.json())
-    .use(session({ secret: 'SECRET' }))
+    .use(session({ secret: SESSION_SECRET }))
     .use(logger)
     .use(fileAssets)
     .use(addStoreToRequestPipeline)

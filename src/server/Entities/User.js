@@ -14,7 +14,7 @@ let UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    manager: Boolean,
+    role: String,
     firstName: String,
     lastName: String
 });
