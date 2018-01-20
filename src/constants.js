@@ -1,8 +1,9 @@
 export const URL_DOMAIN = "http://localhost:3000"
 export const JWT_SECRET = "12345-67890-09876-54321"
 export const SESSION_SECRET = "SECRET"
+export const ANONYMOUS_ID = "-1"
 
-const ACTIONS = {
+export const ACTIONS = {
     //color
     ADD_COLOR: "ADD_COLOR",
     RATE_COLOR: "RATE_COLOR",
@@ -30,7 +31,8 @@ export const URLS = {
 
 export const ROLES = {
     MANAGER: "MANAGER",
-    DEVELOPER: "DEVELOPER"
+    DEVELOPER: "DEVELOPER",
+    ANONYMOUS: MESSAGES.ANONYMOUS
 }
 
 

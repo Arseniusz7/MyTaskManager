@@ -53,7 +53,15 @@ export const addProject = (title, description) => dispatch =>
 export const register = (email, password, firstName, lastName, manager) => dispatch =>
     fetchThenDispatch(
         dispatch,
-        '/register',
+        URLS.REGISTER,
         'POST',
         JSON.stringify({email, password, firstName, lastName, manager})
+    )
+
+export const login = (email, password) => dispatch =>
+    fetchThenDispatch(
+        dispatch,
+        URLS.LOGIN,
+        'POST',
+        JSON.stringify({email, password})
     )

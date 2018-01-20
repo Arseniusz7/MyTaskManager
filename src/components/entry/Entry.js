@@ -1,12 +1,12 @@
 /**
  * project colors
  */
-import {LoginForm} from './LoginForm'
+import {Login} from './containersEntry'
 import { NavLink as Link } from 'react-router-dom'
 
 const Entry = () =>
     <div>
-        <LoginForm/>
+        <Login/>
         <Link to="/register">Would you like create an account?</Link>
     </div>
 

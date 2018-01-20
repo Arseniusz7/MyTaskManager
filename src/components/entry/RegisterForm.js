@@ -3,7 +3,6 @@
  */
 import {Component} from 'react'
 import {MESSAGES} from './../../constants'
-import { withRouter } from 'react-router'
 
 const RegisterForm = ({onRegister=f=>f}) => {
     let email

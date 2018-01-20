@@ -86,40 +86,22 @@ const redirectAuth = (req, res) =>
 
 const redirectUnauth = (req, res) =>
     (req.url !== '/' && req.url !== URLS.REGISTER && req.url !== URLS.LOGIN) ?
-        res.redirect('/') :
+        res.redirect(303, '/') :
         res.status(200).send(htmlResponse(req.url))
 
+
 const respond = (req, res, next) =>
-    (!res.headersSent)
-        ? (req.session.passport && req.session.passport.user) ?
-                redirectAuth(req, res) :
-                redirectUnauth(req, res)
-        : null
+    (!res.headersSent) ?
+        redirectAuth(req, res) :
+        null
 
-
-import Cookies from 'cookies'
-import jwt from 'jsonwebtoken'
+const isAuthorize = (req, res, next) =>
+    (req.session.passport && req.session.passport.user) ?
+        next():
+        redirectUnauth(req, res)
 
 const logger = (req, res, next) => {
-    let token = new Cookies(req,res).get('access_token')
-    if (token) {
-        // verifies secret and checks exp
-        jwt.verify(token, '12345-67890-09876-54321', function (err, decoded) {
-            if (err) {
-                let err = new Error('You are not authenticated!');
-                err.status = 401;
-                return next(err);
-            } else {
-                console.log(decoded)
-                // if everything is good, save to request for use in other routes
-                req.decoded = decoded;
-                //console.log('fa', name);
-
-            }
-        });
-    }
     console.log(`${req.method} request for '${req.url}'.`)
-    console.log(`Got a token: ${token}`)
     if(req.session.passport && req.session.passport.user)
         console.log(`User: ${req.session.passport.user}`)
     else
@@ -154,6 +136,7 @@ export default express()
     .use(passport.initialize())
     .use(passport.session())
     .use(passportRouter)
+    .use(isAuthorize)
     .use(api)
     .use(respond)
 
