@@ -10,6 +10,8 @@ export const project = (state = {}, action={type: null}) => {
                 id: action.id,
                 title: action.title,
                 description: action.description,
+                developers: action.developers,
+                tasks: action.tasks,
                 timestamp: action.timestamp
             }
         default:

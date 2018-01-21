@@ -8,8 +8,9 @@ import { Provider } from 'react-redux'
 import { compose } from 'redux'
 import { StaticRouter } from 'react-router-dom'
 import { renderToString } from 'react-dom/server'
-import api from './color-api'
-import passportRouter from './passportRouter'
+import api from './routes/taskManagerRouter'
+import authorization from './routes/authRouter'
+import {authSuccess} from './serverActions/serverActions'
 import App from '../components/App'
 import storeFactory from '../store'
 import initialState from '../../data/initialState.json'
@@ -30,10 +31,6 @@ db.on('error', console.error.bind(console, "connection error"));
 db.once('open', function(){
     console.warn("Db is open...");
 });
-
-
-
-const serverStore = storeFactory(true, initialState)
 
 const buildHTMLPage = ({html, state, url, css}) => `
 <!DOCTYPE html>
@@ -61,33 +58,38 @@ const renderComponentsToHTML = ({url, store}) =>
         html: renderToString(
             <Provider store={store}>
                 <StaticRouter location={url} context={{}}>
-                    <App />
+                    <App/>
                 </StaticRouter>
             </Provider>
         )
     })
 
-const makeClientStoreFrom = store => url =>
+const makeClientStoreFrom = (req) =>
     ({
-        url,
-        store: storeFactory(false, store.getState())
+        url: req.url,
+        store: storeFactory(false, req.store.getState())
     })
 
 const htmlResponse = compose(
     buildHTMLPage,
     renderComponentsToHTML,
-    makeClientStoreFrom(serverStore)
+    makeClientStoreFrom
 )
+
+const dispatchAuthorize = (req, res) => {
+    req.store.dispatch(authSuccess(req.session.passport.user.id, req.session.passport.user.role))
+    res.status(200).send(htmlResponse(req))
+}
 
 const redirectAuth = (req, res) =>
     (req.url === '/' || req.url === URLS.REGISTER || req.url === URLS.LOGIN) ?
         res.redirect('/app') :
-        res.status(200).send(htmlResponse(req.url))
+        dispatchAuthorize(req, res)
 
 const redirectUnauth = (req, res) =>
     (req.url !== '/' && req.url !== URLS.REGISTER && req.url !== URLS.LOGIN) ?
         res.redirect(303, '/') :
-        res.status(200).send(htmlResponse(req.url))
+        res.status(200).send(htmlResponse(req))
 
 
 const respond = (req, res, next) =>
@@ -103,14 +105,14 @@ const isAuthorize = (req, res, next) =>
 const logger = (req, res, next) => {
     console.log(`${req.method} request for '${req.url}'.`)
     if(req.session.passport && req.session.passport.user)
-        console.log(`User: ${req.session.passport.user}`)
+        console.log(`UserID: ${req.session.passport.user.id}`)
     else
         console.log('Unauthorized')
     next()
 }
 
 const addStoreToRequestPipeline = (req, res, next) => {
-    req.store = serverStore
+    req.store = storeFactory(true, initialState)
     next()
 }
 
@@ -135,7 +137,7 @@ export default express()
     .use(addStoreToRequestPipeline)
     .use(passport.initialize())
     .use(passport.session())
-    .use(passportRouter)
+    .use(authorization)
     .use(isAuthorize)
     .use(api)
     .use(respond)

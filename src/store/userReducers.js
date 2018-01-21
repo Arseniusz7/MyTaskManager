@@ -8,7 +8,7 @@ export const user = (state={}, action={type: null}) => {
         case ACTIONS.AUTHENTICATION:
             return {
                 auth: action.auth,
-                user: action.id,
+                id: action.id,
                 role: action.role,
                 messageDetails: action.messageDetails
             }

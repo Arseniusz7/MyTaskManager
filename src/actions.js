@@ -44,7 +44,7 @@ export const rateColor = (id, rating) => dispatch =>
 export const addProject = (title, description) => dispatch =>
     fetchThenDispatch(
         dispatch,
-        '/projects',
+        URLS.PROJECTS,
         'POST',
         JSON.stringify({title, description})
     )

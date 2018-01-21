@@ -2,22 +2,15 @@
  * project colors
  */
 import { Router } from 'express'
-import User from './Entities/User'
+import User from '../entities/User'
 import passport from 'passport'
-import Cookies from 'cookies'
-import jwt from 'jsonwebtoken'
-import dispatchAndRespond from './dispatchAndRespond'
-import ACTIONS, {MESSAGES, URLS, ROLES, JWT_SECRET, ANONYMOUS_ID} from './../constants'
+import dispatchAndRespond from '../dispatchAndRespond'
+import {MESSAGES, URLS, ROLES } from '../../constants'
+import {authSuccess, authError} from '../serverActions/serverActions'
 
 const router = Router()
 
-const authError = (err, auth=MESSAGES.LOGIN_ERROR) => ({
-    type: ACTIONS.AUTHENTICATION,
-    auth: auth,
-    id: ANONYMOUS_ID,
-    role: ROLES.ANONYMOUS,
-    messageDetails: err.toString()
-})
+
 
 export const registerError = (req, res, err) =>
     dispatchAndRespond(req, res, authError(err, MESSAGES.REGISTER_ERROR))
@@ -26,13 +19,7 @@ export const loginError = (req, res, err) =>
     dispatchAndRespond(req, res, authError(err, MESSAGES.LOGIN_ERROR))
 
 export const authorizationSuccess = (req, res, {_id, role}) => {
-    dispatchAndRespond(req, res, {
-        type: ACTIONS.AUTHENTICATION,
-        auth: MESSAGES.SUCCESS,
-        id: _id,
-        role: role,
-        messageDetails: MESSAGES.SUCCESS
-    })
+    dispatchAndRespond(req, res, authSuccess(_id, role))
 }
 
 router.post(URLS.REGISTER,
@@ -76,37 +63,6 @@ router.post(URLS.LOGIN,
         )(req, res, next);
     })
 
-
-// deprecated jwt
-export const authorize = (req, res, _id, role) => {
-    console.log(`UserId: ${_id}. Role: ${role}`)
-    let token = jwt.sign({_id, role}, JWT_SECRET, {
-        expiresIn: 2400000
-    });
-    new Cookies(req,res).set('access_token',token,{
-        httpOnly: true,
-        secure: false, // for your production environment
-    });
-}
-
-export const isAuthorize = (req, res, next) => {
-    let token = new Cookies(req,res).get('access_token')
-    console.log(`Got a token: ${token}`)
-    if (token) {
-        // verifies secret and checks exp
-        jwt.verify(token, JWT_SECRET, function (err, decoded) {
-            if (err) {
-                let err = new Error('You are not authenticated!');
-                err.status = 401;
-                return next(err);
-            } else {
-                console.log(decoded)
-                // if everything is good, save to request for use in other routes
-                req.decoded = decoded;
-            }
-        });
-    }
-}
 
 
 export default router

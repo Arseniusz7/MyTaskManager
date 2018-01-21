@@ -10,12 +10,10 @@ const store = storeFactory(false, window.__INITIAL_STATE__)
 window.React = React
 
 
-console.log('rendered from here...')
-
 hydrate(
     <Provider store={store}>
         <BrowserRouter>
-          <App />
+          <App/>
         </BrowserRouter>
     </Provider>,
     document.getElementById('react-container')

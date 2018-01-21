@@ -1,5 +1,4 @@
 export const URL_DOMAIN = "http://localhost:3000"
-export const JWT_SECRET = "12345-67890-09876-54321"
 export const SESSION_SECRET = "SECRET"
 export const ANONYMOUS_ID = "-1"
 
@@ -26,7 +25,9 @@ export const URLS = {
     //passport
     LOGIN: "/login",
     LOGOUT: "/logout",
-    REGISTER: "/register"
+    REGISTER: "/register",
+    // task manager
+    PROJECTS: "/projects"
 }
 
 export const ROLES = {

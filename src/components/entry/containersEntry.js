@@ -6,7 +6,7 @@ import {RegisterFormForRedirect} from './RegisterForm'
 import {LoginFormForRedirect} from './LoginForm'
 import {register, login} from './../../actions'
 
-export const userStateToProps = ({user}, {history}) => ({ user, history })
+const userStateToProps = ({user}, {history}) => ({ user, history })
 
 export const Register = connect(
     userStateToProps,

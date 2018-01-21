@@ -4,9 +4,10 @@
 import { connect } from 'react-redux'
 import AddProjectForm from './AddProjectForm'
 import {addProject} from './../../actions'
+import {userStateToProps} from './../userStateToProps'
 
 export const NewProject = connect(
-    null,
+    userStateToProps,
     dispatch =>
         ({
             onNewProject(title, description) {

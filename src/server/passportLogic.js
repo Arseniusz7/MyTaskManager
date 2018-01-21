@@ -1,7 +1,7 @@
 /**
  * project colors
  */
-import User from './Entities/User'
+import User from './entities/User'
 
 // SOME SALT AND HASHING WILL BE NICE
 
@@ -18,10 +18,10 @@ export const localStrategy = (username, password, done) => {
 }
 
 export const serializeUser = (user, done) => {
-    done(null, user.id)
+    done(null, { id: user.id, role: user.role})
 }
 
-export const deserializeUser = (id, done) => {
+export const deserializeUser = ({id}, done) => {
     User.findById(id, function (err, user) {
         err
             ? done(err)

@@ -1,7 +1,6 @@
-/**
- * project colors
- */
-const AddProjectForm = ({onNewProject = f=>f}) => {
+import {ROLES} from './../../constants'
+
+export const ProjectForm = ({onNewProject = f=>f}) => {
     let title
     let description
 
@@ -18,7 +17,12 @@ const AddProjectForm = ({onNewProject = f=>f}) => {
             <input ref={(input) => title = input } type="text" placeholder="Title" required/>
             <input ref={(input) => description = input } type="text" placeholder="Description"/>
             <button>Add project</button>
-        </form>)
+        </form>
+    )
 }
+
+
+const AddProjectForm = ({user = { role: null }, onNewProject = f=>f}) =>
+        (user.role === ROLES.MANAGER) ? <ProjectForm onNewProject={onNewProject}/> : null
 
 export default AddProjectForm
