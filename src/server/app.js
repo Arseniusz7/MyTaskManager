@@ -14,7 +14,8 @@ import {authSuccess} from './serverActions/serverActions'
 import App from '../components/App'
 import storeFactory from '../store'
 import initialState from '../../data/initialState.json'
-import {URLS, SESSION_SECRET} from './../constants'
+import {URLS, SESSION_SECRET, ROLES} from './../constants'
+import {getManagerProjectsToStore, getDeveloperProjectsToStore} from './data/data'
 
 const staticCSS = fs.readFileSync(path.join(__dirname, '../../dist/assets/bundle.css'))
 const fileAssets = express.static(path.join(__dirname, '../../dist/assets'))
@@ -77,8 +78,20 @@ const htmlResponse = compose(
 )
 
 const dispatchAuthorize = (req, res) => {
-    req.store.dispatch(authSuccess(req.session.passport.user.id, req.session.passport.user.role))
-    res.status(200).send(htmlResponse(req))
+    let { id, role } = req.session.passport.user
+    const successCallback = () => res.status(200).send(htmlResponse(req))
+    req.store.dispatch(authSuccess(id, role))
+    switch (role) {
+        case ROLES.MANAGER:
+            getManagerProjectsToStore(req.store, id, successCallback)
+            break
+        case ROLES.DEVELOPER:
+            getDeveloperProjectsToStore(req.store, id, successCallback)
+            break
+        default:
+            break
+    }
+
 }
 
 const redirectAuth = (req, res) =>

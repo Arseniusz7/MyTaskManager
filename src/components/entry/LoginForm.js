@@ -44,7 +44,7 @@ export class LoginFormForRedirect extends Component  {
     componentDidUpdate() {
         let {user, history} = this.props
         if(user.auth === MESSAGES.SUCCESS)
-            history.push('/app')
+            history.push('/app/projects')
     }
 
     render() {

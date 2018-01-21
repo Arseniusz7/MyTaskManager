@@ -26,6 +26,8 @@ export const projects = (state=[], action={type: null}) => {
                 ...state,
                 project({}, action)
             ]
+        case ACTIONS.ADD_PROJECTS:
+            return [...state, ...action.projects]
         default:
             return state
     }

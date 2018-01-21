@@ -2,11 +2,14 @@
  * project colors
  */
 import { connect } from 'react-redux'
-import AddProjectForm from './AddProjectForm'
-import {addProject} from './../../actions'
+import {Component} from 'react'
+import {ManagerAccess} from './ManagerAccess'
+import {ProjectList} from './ProjectList'
+import {addProject, getProjects} from './../../actions'
 import {userStateToProps} from './../userStateToProps'
 
-export const NewProject = connect(
+
+export const Manager = connect(
     userStateToProps,
     dispatch =>
         ({
@@ -14,4 +17,29 @@ export const NewProject = connect(
                 dispatch(addProject(title, description))
             }
         })
-)(AddProjectForm)
+)(ManagerAccess)
+
+export const Projects = connect(
+    ({projects}) => ({projects}),
+    null
+) (ProjectList)
+
+class ProjectListLoad extends Component {
+    componentDidMount () {
+        this.props.loadProjects()
+    }
+
+    render() {
+        return <Projects/>
+    }
+}
+
+export const LoadProjects = connect(
+    null,
+    dispatch =>
+        ({
+            loadProjects() {
+                dispatch(getProjects())
+            }
+        })
+)(ProjectListLoad)

@@ -1,4 +1,3 @@
-import {ROLES} from './../../constants'
 
 export const ProjectForm = ({onNewProject = f=>f}) => {
     let title
@@ -21,8 +20,3 @@ export const ProjectForm = ({onNewProject = f=>f}) => {
     )
 }
 
-
-const AddProjectForm = ({user = { role: null }, onNewProject = f=>f}) =>
-        (user.role === ROLES.MANAGER) ? <ProjectForm onNewProject={onNewProject}/> : null
-
-export default AddProjectForm

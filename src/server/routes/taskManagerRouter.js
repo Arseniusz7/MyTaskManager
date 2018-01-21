@@ -1,42 +1,37 @@
 import { Router } from 'express'
 import ACTIONS, {ROLES, URLS} from '../../constants'
-import Project from '../entities/Project'
 import dispatchAndRespond from '../dispatchAndRespond'
-import {addProjectDB} from './../data/data'
+import {addProjectDB, getDeveloperProjectsDB, getManagerProjectsDB} from './../data/data'
 
 import { v4 } from 'uuid'
 
 const router = Router()
 
-//Project.
-/*findOne({ title: 'sdf' }).
- populate('manager').
- exec(function (err, project) {
- if (err) return handleError(err);
- console.log('The author is %s', project.manager);
- });*/
-/*} else {
- res.redirect("/")
- }*/
 
-
-
-router.post(URLS.PROJECTS,  (req, res) => {
+router.post(URLS.PROJECT,  (req, res) => {
     if(req.session.passport.user.role === ROLES.MANAGER) {
-        let project = new Project({
+        let project = {
             title: req.body.title, description: req.body.description, manager: req.session.passport.user.id,
             tasks: [], developers: [], timestamp: new Date().toString()
-        })
+        }
         addProjectDB(req, res, project)
     } else {
         console.log("You don't have permits")
     }
 })
 
-
-
-
-
+router.get(URLS.PROJECTS,  (req, res) => {
+    switch (req.session.passport.user.role) {
+        case ROLES.MANAGER:
+            getManagerProjectsDB(req, res)
+            break
+        case ROLES.DEVELOPER:
+            getDeveloperProjectsDB(req, res)
+            break
+        default:
+            break
+    }
+})
 
 
 

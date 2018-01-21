@@ -9,6 +9,7 @@ export const ACTIONS = {
     REMOVE_COLOR: "REMOVE_COLOR",
     // project
     ADD_PROJECT: "ADD_PROJECT",
+    ADD_PROJECTS: "ADD_PROJECTS",
     // user
     AUTHENTICATION: "AUTHENTICATION",
 }
@@ -27,6 +28,7 @@ export const URLS = {
     LOGOUT: "/logout",
     REGISTER: "/register",
     // task manager
+    PROJECT: "/project",
     PROJECTS: "/projects"
 }
 

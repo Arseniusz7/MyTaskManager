@@ -29,3 +29,8 @@ export const addProject = (project) => ({
     tasks: project.tasks,
     timestamp: project.timestamp
 })
+
+export const addProjects = (projects) => ({
+    type: ACTIONS.ADD_PROJECTS,
+    projects: projects
+})
