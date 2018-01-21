@@ -2,7 +2,8 @@
  * project colors
  */
 import Project from '../entities/Project'
-import {addProject, addProjects} from './../serverActions/serverActions'
+import Task from '../entities/Task'
+import {addProject, addProjects, addTask} from './../serverActions/serverActions'
 import dispatchAndRespond from '../dispatchAndRespond'
 
 const dumpCatch = err => console.error(err)
@@ -40,6 +41,22 @@ export const getManagerProjectsDB = (req, res) => {
 export const getDeveloperProjectsDB = (req, res) => {
     Project.find({ developers : req.session.passport.user.id})
         .then(projects => dispatchAndRespond(req, res, addProjects(projects)))
+        .catch(dumpCatch)
+}
+
+export const addTaskDB = (req, res, task, id) => {
+    Project.findById(id)
+        .then(project => {
+                new Task(task).save()
+                    .then(task => {
+                        project.tasks = [...project.tasks, task._id]
+                        project.save()
+                            .then(() => dispatchAndRespond(req, res, addTask(task, id)))
+                            .catch(dumpCatch)
+                    })
+                    .catch(dumpCatch)
+            }
+        )
         .catch(dumpCatch)
 }
 

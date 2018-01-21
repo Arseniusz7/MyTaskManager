@@ -3,13 +3,10 @@ export const SESSION_SECRET = "SECRET"
 export const ANONYMOUS_ID = "-1"
 
 export const ACTIONS = {
-    //color
-    ADD_COLOR: "ADD_COLOR",
-    RATE_COLOR: "RATE_COLOR",
-    REMOVE_COLOR: "REMOVE_COLOR",
     // project
     ADD_PROJECT: "ADD_PROJECT",
     ADD_PROJECTS: "ADD_PROJECTS",
+    ADD_TASK: "ADD_TASK",
     // user
     AUTHENTICATION: "AUTHENTICATION",
 }
@@ -29,7 +26,15 @@ export const URLS = {
     REGISTER: "/register",
     // task manager
     PROJECT: "/project",
-    PROJECTS: "/projects"
+    PROJECTS: "/projects",
+    TASK: "/task"
+}
+
+export const TASK_STATUS = {
+    WAITING: "waiting",
+    IMPLEMENTATION: "implementation",
+    VERIFYING: "verifying",
+    RELEASING: "releasing"
 }
 
 export const ROLES = {

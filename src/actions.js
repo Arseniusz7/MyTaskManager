@@ -1,5 +1,5 @@
 //import fetch from 'isomorphic-fetch'
-import IsomorphicFetch from './real-isomorphic-fetch/index'
+import IsomorphicFetch from './real-isomorphic-fetch/fetch'
 import fetch from 'node-fetch'
 import {URL_DOMAIN, URLS} from './constants'
 const fetchInstance = new IsomorphicFetch(fetch)
@@ -18,29 +18,6 @@ const fetchThenDispatch = (dispatch, url, method, body) =>
         .then(dispatch)
         .catch(logError)
 
-export const addColor = (title, color) => dispatch =>
-    fetchThenDispatch(
-        dispatch,
-        '/colors',
-        'POST',
-        JSON.stringify({title, color})
-    )
-
-export const removeColor = id => dispatch =>
-    fetchThenDispatch(
-        dispatch,
-        `/color/${id}`,
-        'DELETE'
-    )
-
-export const rateColor = (id, rating) => dispatch =>
-    fetchThenDispatch(
-        dispatch,
-        `/color/${id}`,
-        'PUT',
-        JSON.stringify({rating})
-    )
-
 export const addProject = (title, description) => dispatch =>
     fetchThenDispatch(
         dispatch,
@@ -54,6 +31,14 @@ export const getProjects = () => dispatch =>
         dispatch,
         URLS.PROJECTS,
         'GET',
+    )
+
+export const addTask = (title, description, status, projectID) => dispatch =>
+    fetchThenDispatch(
+        dispatch,
+        URLS.TASK,
+        'POST',
+        JSON.stringify({title, description, status, projectID})
     )
 
 

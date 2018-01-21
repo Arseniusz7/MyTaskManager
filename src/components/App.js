@@ -1,9 +1,7 @@
 import { Route, Switch, Redirect } from 'react-router-dom'
-import Whoops404 from './ui/Whoops404'
 import {Manager, Projects, LoadProjects} from './project/containersProject'
 import {Register, Login} from './entry/containersEntry'
 import {URLS, MESSAGES} from './../constants'
-import '../stylesheets/APP.scss'
 
 import {Component} from 'react'
 
@@ -22,7 +20,7 @@ class MainApp extends Component {
     render() {
         let {user} = this.props
         return (
-            <div className="app">
+            <div>
                 <a href={URLS.LOGOUT}>Log out</a>
                 <p>{user.id}</p>
                 <p>{user.role}</p>
