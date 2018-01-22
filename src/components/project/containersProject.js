@@ -6,12 +6,13 @@ import {Component} from 'react'
 import {ManagerAccess} from './ManagerAccess'
 import {ProjectList} from './ProjectList'
 import {AddTask} from './AddTask'
-import {addProject, getProjects, addTask} from './../../actions'
-import {userStateToProps} from './../userStateToProps'
+import {TaskList} from './TaskList'
+import {addProject, getProjects, addTask, getTasks} from './../../actions'
+import {findTasks} from '../../lib/selectors'
 
 
 export const Manager = connect(
-    userStateToProps,
+    ({user}) => ({ user}),
     dispatch =>
         ({
             onNewProject(title, description) {
@@ -36,6 +37,20 @@ export const NewTask = connect(
         })
 ) (AddTask)
 
+
+export const Tasks = connect(
+    ({ projects }, { match }) =>
+        ({
+            tasks: findTasks(projects, match.params.id),
+            match
+        }),
+    dispatch =>
+        ({
+            loadTasks(projectID) {
+                dispatch(getTasks(projectID))
+            }
+        })
+)(TaskList)
 
 
 class ProjectListLoad extends Component {

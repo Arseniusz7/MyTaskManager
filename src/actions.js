@@ -1,5 +1,5 @@
 //import fetch from 'isomorphic-fetch'
-import IsomorphicFetch from './real-isomorphic-fetch/fetch'
+import IsomorphicFetch from './lib/fetch'
 import fetch from 'node-fetch'
 import {URL_DOMAIN, URLS} from './constants'
 const fetchInstance = new IsomorphicFetch(fetch)
@@ -39,6 +39,13 @@ export const addTask = (title, description, status, projectID) => dispatch =>
         URLS.TASK,
         'POST',
         JSON.stringify({title, description, status, projectID})
+    )
+
+export const getTasks = (projectID) => dispatch =>
+    fetchThenDispatch(
+        dispatch,
+        `${URLS.TASK}/${projectID}`,
+        'GET'
     )
 
 

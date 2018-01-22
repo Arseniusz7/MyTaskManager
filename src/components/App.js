@@ -1,30 +1,33 @@
-import { Route, Switch, Redirect } from 'react-router-dom'
-import {Manager, Projects, LoadProjects} from './project/containersProject'
+import { Route, Switch, Redirect, NavLink } from 'react-router-dom'
+import {Manager, Projects, LoadProjects, Tasks} from './project/containersProject'
 import {Register, Login} from './entry/containersEntry'
-import {URLS, MESSAGES} from './../constants'
+import {URLS, ROLES} from './../constants'
 
 import {Component} from 'react'
 
-class MainApp extends Component {
+export class MainApp extends Component {
 
     static defaultProps = {
-        user: { auth: null }
-    }
-
-    componentDidUpdate() {
-        let {user, history} = this.props
-        if(user.auth !== MESSAGES.SUCCESS)
-            history.push('/')
+        user: {},
+        location: {}
     }
 
     render() {
-        let {user} = this.props
+        let {user, location} = this.props
         return (
             <div>
                 <a href={URLS.LOGOUT}>Log out</a>
                 <p>{user.id}</p>
-                <p>{user.role}</p>
-                <Manager/>
+                <p>Welcome {user.role}</p>
+                {
+                    (user.role === ROLES.MANAGER)
+                        ? (location.pathname === "/app/manager")
+                            ? <NavLink to="/app">Go back to projects</NavLink>
+                            : <NavLink to="/app/manager">Go to manager panel</NavLink>
+                    : null
+                }
+                <Route path="/app/manager" component={Manager}/>
+                <Route path="/app/tasks/:id" component={Tasks}/>
                 <Route path="/app/projects" component={LoadProjects}/>
                 <Route exact path="/app" component={Projects}/>
             </div>)
@@ -33,10 +36,8 @@ class MainApp extends Component {
 
 import { connect } from 'react-redux'
 
-const userStateToProps = ({user}, {history}) => ({ user, history })
-
 export const IsAuthorize = connect(
-    userStateToProps,
+    ({user}, {location}) => ({ user, location }),
     null
 )(MainApp)
 

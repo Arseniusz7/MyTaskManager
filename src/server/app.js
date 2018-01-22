@@ -3,21 +3,15 @@ import path from 'path'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
-import fs from 'fs'
-import { Provider } from 'react-redux'
-import { compose } from 'redux'
-import { StaticRouter } from 'react-router-dom'
-import { renderToString } from 'react-dom/server'
 import api from './routes/taskManagerRouter'
 import authorization from './routes/authRouter'
 import {authSuccess} from './serverActions/serverActions'
-import App from '../components/App'
+import {htmlResponse} from './htmlResponse'
 import storeFactory from '../store'
 import initialState from '../../data/initialState.json'
 import {URLS, SESSION_SECRET, ROLES} from './../constants'
-import {getManagerProjectsToStore, getDeveloperProjectsToStore} from './data/data'
+import {getDeveloperProjectsDB, getManagerProjectsDB} from './data/data'
 
-const staticCSS = fs.readFileSync(path.join(__dirname, '../../dist/assets/bundle.css'))
 const fileAssets = express.static(path.join(__dirname, '../../dist/assets'))
 
 import mongoose from 'mongoose'
@@ -33,60 +27,23 @@ db.once('open', function(){
     console.warn("Db is open...");
 });
 
-const buildHTMLPage = ({html, state, url, css}) => `
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta name="viewport" content="minimum-scale=1.0, width=device-width, maximum-scale=1.0, user-scalable=no" />
-        <meta charset="utf-8">
-        <title>Universal Color Organizer</title>
-        <style>${staticCSS}</style>
-    </head>
-    <body>
-        <div id="react-container">${html}</div>
-        <script>
-            window.__INITIAL_STATE__ = ${JSON.stringify(state)}
-        </script>
-        <script src="/bundle.js"></script>
-    </body>
-</html>
-`
 
-const renderComponentsToHTML = ({url, store}) =>
-    ({
-        url: url,
-        state: store.getState(),
-        html: renderToString(
-            <Provider store={store}>
-                <StaticRouter location={url} context={{}}>
-                    <App/>
-                </StaticRouter>
-            </Provider>
-        )
-    })
-
-const makeClientStoreFrom = (req) =>
-    ({
-        url: req.url,
-        store: storeFactory(false, req.store.getState())
-    })
-
-const htmlResponse = compose(
-    buildHTMLPage,
-    renderComponentsToHTML,
-    makeClientStoreFrom
-)
 
 const dispatchAuthorize = (req, res) => {
     let { id, role } = req.session.passport.user
-    const successCallback = () => res.status(200).send(htmlResponse(req))
+    // NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO !!!
+    // I HOPE THIS LINE HAS BEEN NEVER APPEARED
+    // BUT TIME IS TICKING
+    // ONE DAY THE CHOSEN WILL DESTROY IT
+    req.url = '/app'
+    // NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO !!!
     req.store.dispatch(authSuccess(id, role))
     switch (role) {
         case ROLES.MANAGER:
-            getManagerProjectsToStore(req.store, id, successCallback)
+            getManagerProjectsDB(req, res, true)
             break
         case ROLES.DEVELOPER:
-            getDeveloperProjectsToStore(req.store, id, successCallback)
+            getDeveloperProjectsDB(req, res, true)
             break
         default:
             break
@@ -95,7 +52,7 @@ const dispatchAuthorize = (req, res) => {
 }
 
 const redirectAuth = (req, res) =>
-    (req.url === '/' || req.url === URLS.REGISTER || req.url === URLS.LOGIN) ?
+    (req.url === '/' || req.url === URLS.REGISTER || req.url === URLS.LOGIN || req.url === "/app/projects") ?
         res.redirect('/app') :
         dispatchAuthorize(req, res)
 

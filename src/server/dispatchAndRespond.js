@@ -1,10 +1,11 @@
-/**
- * project colors
- */
+import {htmlResponse} from './htmlResponse'
 
-const dispatchAndRespond = (req, res, action) => {
+const dispatchAndRespond = (req, res, action, server) => {
     req.store.dispatch(action)
-    res.status(200).json(action)
+    if(server)
+        res.status(200).send(htmlResponse(req))
+    else
+        res.status(200).json(action)
 }
 
 export default dispatchAndRespond

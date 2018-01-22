@@ -41,6 +41,12 @@ export const addTask = (task, id) => ({
     timestamp: task.timestamp
 })
 
+export const addTasks = (tasks, id) => ({
+    id: id,
+    type: ACTIONS.ADD_TASKS,
+    tasks: tasks
+})
+
 export const addProjects = (projects) => ({
     type: ACTIONS.ADD_PROJECTS,
     projects: projects
