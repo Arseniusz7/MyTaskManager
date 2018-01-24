@@ -4,12 +4,13 @@ import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
 import api from './routes/taskManagerRouter'
+import reactRenderAPI from './routes/reactRenderRouter'
 import authorization from './routes/authRouter'
 import {authSuccess} from './serverActions/serverActions'
 import {htmlResponse} from './htmlResponse'
 import storeFactory from '../store'
 import initialState from '../../data/initialState.json'
-import {URLS, SESSION_SECRET, ROLES} from './../constants'
+import {URLS, SESSION_SECRET, ROLES, DB_CONNECTION} from './../constants'
 import {getDeveloperProjectsDB, getManagerProjectsDB} from './data/data'
 
 const fileAssets = express.static(path.join(__dirname, '../../dist/assets'))
@@ -20,7 +21,8 @@ import LocalStrategy from 'passport-local'
 import {localStrategy, deserializeUser, serializeUser} from './passportLogic'
 
 
-mongoose.connect('mongodb://localhost/TaskManager');
+
+mongoose.connect(DB_CONNECTION);
 let db = mongoose.connection;
 db.on('error', console.error.bind(console, "connection error"));
 db.once('open', function(){
@@ -28,33 +30,6 @@ db.once('open', function(){
 });
 
 
-
-const dispatchAuthorize = (req, res) => {
-    let { id, role } = req.session.passport.user
-    // NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO !!!
-    // I HOPE THIS LINE HAS BEEN NEVER APPEARED
-    // BUT TIME IS TICKING
-    // ONE DAY THE CHOSEN WILL DESTROY IT
-    req.url = '/app'
-    // NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO !!!
-    req.store.dispatch(authSuccess(id, role))
-    switch (role) {
-        case ROLES.MANAGER:
-            getManagerProjectsDB(req, res, true)
-            break
-        case ROLES.DEVELOPER:
-            getDeveloperProjectsDB(req, res, true)
-            break
-        default:
-            break
-    }
-
-}
-
-const redirectAuth = (req, res) =>
-    (req.url === '/' || req.url === URLS.REGISTER || req.url === URLS.LOGIN || req.url === "/app/projects") ?
-        res.redirect('/app') :
-        dispatchAuthorize(req, res)
 
 const redirectUnauth = (req, res) =>
     (req.url !== '/' && req.url !== URLS.REGISTER && req.url !== URLS.LOGIN) ?
@@ -64,12 +39,18 @@ const redirectUnauth = (req, res) =>
 
 const respond = (req, res, next) =>
     (!res.headersSent) ?
-        redirectAuth(req, res) :
+        res.redirect('/app') :
         null
+
+const Authorize = (req, res, next) => {
+    let { id, role } = req.session.passport.user
+    req.store.dispatch(authSuccess(id, role))
+    next()
+}
 
 const isAuthorize = (req, res, next) =>
     (req.session.passport && req.session.passport.user) ?
-        next():
+        Authorize(req, res, next):
         redirectUnauth(req, res)
 
 const logger = (req, res, next) => {
@@ -110,6 +91,7 @@ export default express()
     .use(authorization)
     .use(isAuthorize)
     .use(api)
+    .use(reactRenderAPI)
     .use(respond)
 
 

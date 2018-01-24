@@ -15,7 +15,7 @@ export const authError = (err, auth=MESSAGES.LOGIN_ERROR) => ({
 export const authSuccess = (_id, role) => ({
     type: ACTIONS.AUTHENTICATION,
     auth: MESSAGES.SUCCESS,
-    id: _id.toString(),
+    id: _id,
     role: role,
     messageDetails: MESSAGES.SUCCESS
 })
@@ -25,8 +25,6 @@ export const addProject = (project) => ({
     id: project._id,
     title: project.title,
     description: project.description,
-    developers: project.developers,
-    tasks: project.tasks,
     timestamp: project.timestamp
 })
 
@@ -35,9 +33,9 @@ export const addTask = (task, id) => ({
     type: ACTIONS.ADD_TASK,
     taskID: task._id,
     title: task.title,
+    developer: task.developer,
     description: task.description,
     status: task.status,
-    comments: task.comments,
     timestamp: task.timestamp
 })
 
@@ -47,7 +45,29 @@ export const addTasks = (tasks, id) => ({
     tasks: tasks
 })
 
+export const addTasksWithProject = (project) => ({
+    type: ACTIONS.ADD_PROJECTS,
+    projects: [project]
+})
+
 export const addProjects = (projects) => ({
     type: ACTIONS.ADD_PROJECTS,
     projects: projects
+})
+
+export const pickManagerProjects = (projects) => ({
+    type: ACTIONS.PICK_MANAGER_PROJECT,
+    projects: projects
+})
+
+export const pickDeveloperProjects = (projects) => ({
+    type: ACTIONS.PICK_DEVELOPER_PROJECT,
+    projects: projects
+})
+
+
+export const addDevelopers = (developers, id) => ({
+    type: ACTIONS.ADD_DEVELOPERS,
+    id: id,
+    developers: developers
 })

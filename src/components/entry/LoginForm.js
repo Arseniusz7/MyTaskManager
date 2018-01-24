@@ -2,7 +2,7 @@
  * project colors
  */
 import {Component} from 'react'
-import {MESSAGES} from './../../constants'
+import {MESSAGES, URLS} from './../../constants'
 import {IsNewAccount} from './IsNewAccount'
 
 export const LoginForm = ({onLogin=f=>f}) => {
@@ -44,8 +44,10 @@ export class LoginFormForRedirect extends Component  {
     componentDidUpdate() {
         let {user, history} = this.props
         if(user.auth === MESSAGES.SUCCESS)
-            history.push('/app/projects')
+            history.push(URLS.APP)
     }
+
+    // some toasts will be nice
 
     render() {
         let {user, onLogin} = this.props

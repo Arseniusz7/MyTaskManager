@@ -1,6 +1,6 @@
 import { Route, Switch, Redirect, NavLink } from 'react-router-dom'
-import {Manager, Projects, LoadProjects, Tasks} from './project/containersProject'
-import {Register, Login} from './entry/containersEntry'
+import {Manager, LoadProjects, Tasks, ManagerTasks} from './containersProject'
+import {Register, Login} from './containersEntry'
 import {URLS, ROLES} from './../constants'
 
 import {Component} from 'react'
@@ -17,19 +17,18 @@ export class MainApp extends Component {
         return (
             <div>
                 <a href={URLS.LOGOUT}>Log out</a>
-                <p>{user.id}</p>
                 <p>Welcome {user.role}</p>
                 {
                     (user.role === ROLES.MANAGER)
-                        ? (location.pathname === "/app/manager")
-                            ? <NavLink to="/app">Go back to projects</NavLink>
-                            : <NavLink to="/app/manager">Go to manager panel</NavLink>
+                        ? (location.pathname === URLS.APP_MANAGER)
+                            ? <NavLink to={URLS.APP}>Go back to projects</NavLink>
+                            : <NavLink to={URLS.APP_MANAGER}>Go to manager panel</NavLink>
                     : null
                 }
-                <Route path="/app/manager" component={Manager}/>
-                <Route path="/app/tasks/:id" component={Tasks}/>
-                <Route path="/app/projects" component={LoadProjects}/>
-                <Route exact path="/app" component={Projects}/>
+                <Route path={`${URLS.APP_MANAGER_TASKS}/:id`} component={ManagerTasks}/>
+                <Route path={URLS.APP_MANAGER} component={Manager}/>
+                <Route path={`${URLS.APP_TASKS}/:id`} component={Tasks}/>
+                <Route exact path={URLS.APP} component={LoadProjects}/>
             </div>)
     }
 }
@@ -43,7 +42,7 @@ export const IsAuthorize = connect(
 
 const App = () =>
     <Switch>
-        <Route path="/app" component={IsAuthorize} />
+        <Route path={URLS.APP} component={IsAuthorize} />
         <Redirect from={URLS.LOGIN} to="/"/>
         <Route path={URLS.REGISTER} component={Register}/>
         <Route exact path="/" component={Login}/>

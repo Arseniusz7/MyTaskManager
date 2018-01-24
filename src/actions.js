@@ -1,7 +1,7 @@
 //import fetch from 'isomorphic-fetch'
 import IsomorphicFetch from './lib/fetch'
 import fetch from 'node-fetch'
-import {URL_DOMAIN, URLS} from './constants'
+import {URL_DOMAIN, URLS, ACTIONS} from './constants'
 const fetchInstance = new IsomorphicFetch(fetch)
 
 const parseResponse = response => response.json()
@@ -33,6 +33,14 @@ export const getProjects = () => dispatch =>
         'GET',
     )
 
+export const getDevelopers = (firstName, lastName, id) => dispatch =>
+    fetchThenDispatch(
+        dispatch,
+        URLS.DEVELOPERS,
+        'POST',
+        JSON.stringify({firstName, lastName, id})
+    )
+
 export const addTask = (title, description, status, projectID) => dispatch =>
     fetchThenDispatch(
         dispatch,
@@ -47,6 +55,27 @@ export const getTasks = (projectID) => dispatch =>
         `${URLS.TASK}/${projectID}`,
         'GET'
     )
+
+export const addDeveloperToProject = (projectID, developerID) => dispatch =>
+    fetchThenDispatch(
+        dispatch,
+        URLS.DEVELOPER,
+        'POST',
+        JSON.stringify({projectID, developerID})
+    )
+
+export const changeTaskFilter = (filter, key) => ({
+    type: ACTIONS.CHANGE_TASK_FILTERS,
+    taskFilter: filter,
+    keyFilter: key
+})
+
+
+
+export const addToProject = (show) => ({
+    type: ACTIONS.ADD_DEVELOPER_TO_PROJECT,
+    show: show
+})
 
 
 export const register = (email, password, firstName, lastName, manager) => dispatch =>

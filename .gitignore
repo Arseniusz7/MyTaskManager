@@ -21,3 +21,4 @@ yarn-error.log*
 .idea/misc.xml
 *.xml
 src/UI/HomeLanding/VideoSection/dead_by_sunrise_-_fire.mp3
+.idea/.name

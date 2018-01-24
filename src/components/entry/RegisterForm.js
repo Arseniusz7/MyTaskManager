@@ -1,8 +1,7 @@
-/**
- * project colors
- */
+
 import {Component} from 'react'
-import {MESSAGES} from './../../constants'
+import {BackToLogin} from './IsNewAccount'
+import {MESSAGES, URLS} from './../../constants'
 
 const RegisterForm = ({onRegister=f=>f}) => {
     let email
@@ -60,16 +59,19 @@ export class RegisterFormForRedirect extends Component  {
     componentDidUpdate() {
         let {user, history} = this.props
         if(user.auth === MESSAGES.SUCCESS)
-            history.push('/app/projects')
+            history.push(URLS.APP)
     }
+
+    // some toasts will be nice
 
     render() {
         let {user, onRegister} = this.props
+        let register = [<RegisterForm key={0} onRegister={onRegister}/>, <BackToLogin key={1}/>]
         if(user.auth === MESSAGES.REGISTER_ERROR) {
             console.log(MESSAGES.REGISTER_ERROR)
-            return <RegisterForm onRegister={onRegister}/>
+            return register
         } else {
-            return <RegisterForm onRegister={onRegister}/>
+            return register
         }
     }
 }

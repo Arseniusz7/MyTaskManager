@@ -1,9 +1,5 @@
-/**
- * project colors
- */
+
 import ACTIONS from '../constants'
-
-
 
 export const task = (state = {}, action={type: null}) => {
     switch (action.type) {
@@ -13,7 +9,8 @@ export const task = (state = {}, action={type: null}) => {
                 title: action.title,
                 description: action.description,
                 status: action.status,
-                comments: action.comments,
+                developer: action.developer,
+                comments: [],
                 timestamp: action.timestamp
             }
         default:
@@ -41,7 +38,7 @@ export const project = (state = {}, action={type: null}) => {
                 _id: action.id,
                 title: action.title,
                 description: action.description,
-                developers: action.developers,
+                developers: [],
                 tasks: [],
                 timestamp: action.timestamp
             }

@@ -2,9 +2,9 @@
  * project colors
  */
 import { connect } from 'react-redux'
-import {RegisterFormForRedirect} from './RegisterForm'
-import {LoginFormForRedirect} from './LoginForm'
-import {register, login} from './../../actions'
+import {RegisterFormForRedirect} from './entry/RegisterForm'
+import {LoginFormForRedirect} from './entry/LoginForm'
+import {register, login} from '../actions'
 
 const userStateToProps = ({user}, {history}) => ({ user, history })
 

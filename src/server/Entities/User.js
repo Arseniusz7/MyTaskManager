@@ -1,6 +1,4 @@
-/**
- * project colors
- */
+
 import mongoose from 'mongoose'
 import passportLocalMongoose from 'passport-local-mongoose'
 
