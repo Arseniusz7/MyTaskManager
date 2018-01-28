@@ -4,6 +4,10 @@
 import mongoose from 'mongoose'
 
 let CommentSchema = new mongoose.Schema({
+    task: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Task'
+    },
     text: {
         type: String,
         required: true

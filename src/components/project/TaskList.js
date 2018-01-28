@@ -1,30 +1,63 @@
 import {Component} from 'react'
 import {NavLink} from 'react-router-dom'
-import {Task} from './Task'
-import {NewTask, DevFilters, SearchDevelopers, Developers} from '../containersProject'
+import {ShowNewTaskContainer, DevFilters, ShowFindDevContainer, DevelopersTask, Developers, TaskContainer} from '../containersProject'
 import {URLS} from './../../constants'
 
 import {ProjectDetails} from './Project'
 
-export const TaskList = ({projectID, tasks}) =>
+export const TaskListHeader = ({projectID}) =>
     <div>
-        <NavLink to={URLS.APP}>Go back to projects</NavLink>
-        <NewTask projectID={projectID}/>
+        <ShowNewTaskContainer projectID={projectID}/>
         <h3>Tasks:</h3>
-        {
-            tasks.map(task =>
-                <Task key={task._id} {...task}/>
-            )
-        }
     </div>
 
-export const TaskListDetails = ({project, tasks, children}) =>
+export const TaskListDev = ({project, tasks }) =>
     <div>
+        <NavLink to={URLS.APP}>Go back to projects</NavLink>
         <h1>Project:</h1>
-        {children}
-        <TaskList projectID={project._id} tasks={tasks}/>
+        <ProjectDetails {...project}/>
+        <div>
+            <TaskListHeader projectID={project._id}/>
+            {
+                tasks.map(task =>
+                    <div>
+                        <TaskContainer key={task._id} {...task}/>
+                        <NavLink to={`${URLS.APP}/${project._id}${URLS.TASK}/${task._id}`}>
+                            Go to tasks details
+                        </NavLink>
+                    </div>
+                )
+            }
+        </div>
         <DevFilters/>
     </div>
+
+export const TaskListManager = ({project, tasks }) =>
+    <div>
+        <NavLink to={URLS.APP}>Go back to projects</NavLink>
+        <h1>Project:</h1>
+        <ProjectDetails {...project}>
+            <ShowFindDevContainer _id={project._id}/>
+            <Developers projectID={project._id}/>
+        </ProjectDetails>
+        <div>
+            <TaskListHeader projectID={project._id}/>
+            {
+                tasks.map(task =>
+                    <div>
+                        <TaskContainer key={task._id} {...task}/>
+                        <NavLink to={`${URLS.APP}/${project._id}${URLS.TASK}/${task._id}`}>
+                            Go to tasks details
+                        </NavLink>
+                        <ShowFindDevContainer _id={task._id}/>
+                        <DevelopersTask taskID={task._id} projectID={project._id}/>
+                    </div>
+                )
+            }
+        </div>
+    </div>
+
+
 
 
 export class TaskListLoadDetails extends Component {
@@ -48,17 +81,10 @@ export class TaskListLoadDetails extends Component {
 
 export const TaskListLoad = ({project, tasks, match, loadTasks=f=>f}) =>
     <TaskListLoadDetails tasks={tasks} match={match} loadTasks={loadTasks}>
-        <TaskListDetails project={project} tasks={tasks}>
-            <ProjectDetails {...project}/>
-        </TaskListDetails>
+        <TaskListDev project={project} tasks={tasks}/>
     </TaskListLoadDetails>
 
 export const TaskListManagerLoad = ({project, tasks, match, loadTasks=f=>f}) =>
     <TaskListLoadDetails project={project} tasks={tasks} match={match} loadTasks={loadTasks}>
-        <TaskListDetails project={project} tasks={tasks}>
-            <ProjectDetails {...project}>
-                <SearchDevelopers id={project._id}/>
-                <Developers projectID={project._id}/>
-            </ProjectDetails>
-        </TaskListDetails>
+        <TaskListManager project={project} tasks={tasks}/>
     </TaskListLoadDetails>

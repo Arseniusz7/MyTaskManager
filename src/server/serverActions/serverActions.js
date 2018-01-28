@@ -12,6 +12,10 @@ export const authError = (err, auth=MESSAGES.LOGIN_ERROR) => ({
     messageDetails: err.toString()
 })
 
+export const emailSent = () => ({
+    type: ACTIONS.EMAIL_SENT
+})
+
 export const authSuccess = (_id, role) => ({
     type: ACTIONS.AUTHENTICATION,
     auth: MESSAGES.SUCCESS,
@@ -28,8 +32,8 @@ export const addProject = (project) => ({
     timestamp: project.timestamp
 })
 
-export const addTask = (task, id) => ({
-    id: id,
+export const addTask = (task) => ({
+    id: task.project,
     type: ACTIONS.ADD_TASK,
     taskID: task._id,
     title: task.title,
@@ -45,23 +49,47 @@ export const addTasks = (tasks, id) => ({
     tasks: tasks
 })
 
-export const addTasksWithProject = (project) => ({
-    type: ACTIONS.ADD_PROJECTS,
-    projects: [project]
+export const addComment = (comment, projectID) => ({
+    id: projectID,
+    type: ACTIONS.ADD_COMMENT,
+    taskID: comment.task,
+    commentID: comment._id,
+    text: comment.text,
+    author: comment.author,
+    timestamp: comment.timestamp
+})
+
+export const deleteComment = (_id, taskID, projectID) => ({
+    id: projectID,
+    type: ACTIONS.DELETE_COMMENT,
+    taskID: taskID,
+    commentID: _id,
+})
+
+export const updateComment = (text, _id, taskID, projectID) => ({
+    id: projectID,
+    type: ACTIONS.EDIT_COMMENT,
+    taskID: taskID,
+    commentID: _id,
+    text: text
+})
+
+export const addComments = (comments, projectID, taskID) => ({
+    id: projectID,
+    type: ACTIONS.ADD_COMMENTS,
+    taskID: taskID,
+    comments: comments
+})
+
+export const updateStatusTasks = (status, taskID, projectID) => ({
+    id: projectID,
+    type: ACTIONS.UPDATE_TASK_STATUS,
+    taskID: taskID,
+    status: status
 })
 
 export const addProjects = (projects) => ({
     type: ACTIONS.ADD_PROJECTS,
-    projects: projects
-})
-
-export const pickManagerProjects = (projects) => ({
-    type: ACTIONS.PICK_MANAGER_PROJECT,
-    projects: projects
-})
-
-export const pickDeveloperProjects = (projects) => ({
-    type: ACTIONS.PICK_DEVELOPER_PROJECT,
     projects: projects
 })
 

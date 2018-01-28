@@ -1,5 +1,5 @@
 
-export const SearchDevelopersForm = ({id, onFind= f=>f}) => {
+export const SearchDevelopersForm = ({id, onFind=f=>f}) => {
     let firstName
     let lastName
 

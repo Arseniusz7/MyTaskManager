@@ -15,7 +15,7 @@ export const buildHTMLPage = ({html, state, url, css}) => `
     <head>
         <meta name="viewport" content="minimum-scale=1.0, width=device-width, maximum-scale=1.0, user-scalable=no" />
         <meta charset="utf-8">
-        <title>Universal Color Organizer</title>
+        <title>Universal Task Manager</title>
         <style>${staticCSS}</style>
     </head>
     <body>
@@ -41,10 +41,10 @@ export const renderComponentsToHTML = ({url, store}) =>
         )
     })
 
-export const makeClientStoreFrom = (req) =>
+export const makeClientStoreFrom = (server) =>
     ({
-        url: req.url,
-        store: storeFactory(false, req.store.getState())
+        url: server.url,
+        store: storeFactory(false, server.store.getState())
     })
 
 export const htmlResponse = compose(

@@ -1,5 +1,5 @@
 import { Route, Switch, Redirect, NavLink } from 'react-router-dom'
-import {Manager, LoadProjects, Tasks, ManagerTasks} from './containersProject'
+import {Manager, LoadProjects, Tasks, ManagerTasks, TaskDetailsContainer} from './containersProject'
 import {Register, Login} from './containersEntry'
 import {URLS, ROLES} from './../constants'
 
@@ -25,6 +25,7 @@ export class MainApp extends Component {
                             : <NavLink to={URLS.APP_MANAGER}>Go to manager panel</NavLink>
                     : null
                 }
+                <Route path={`${URLS.APP}/:id${URLS.TASK}/:task_id`} component={TaskDetailsContainer}/>
                 <Route path={`${URLS.APP_MANAGER_TASKS}/:id`} component={ManagerTasks}/>
                 <Route path={URLS.APP_MANAGER} component={Manager}/>
                 <Route path={`${URLS.APP_TASKS}/:id`} component={Tasks}/>

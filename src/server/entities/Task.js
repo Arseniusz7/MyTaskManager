@@ -4,7 +4,10 @@
 import mongoose from 'mongoose'
 
 let TaskSchema = new mongoose.Schema({
-
+    project: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Project'
+    },
     title: {
         type: String,
         required: true

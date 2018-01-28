@@ -1,4 +1,4 @@
-import {TASK_STATUS} from './../../constants'
+import {TASK_STATUS_ARRAY} from './../../constants'
 
 export const AddTask = ({projectID=-1, onNewTask = f=>f}) => {
     let title
@@ -8,7 +8,7 @@ export const AddTask = ({projectID=-1, onNewTask = f=>f}) => {
     const submit = (e) => {
         e.preventDefault()
         onNewTask(title.value, description.value, option.value, projectID)
-        option.value = TASK_STATUS.WAITING
+        option.value = TASK_STATUS_ARRAY[0]
         title.value = ''
         description.value = ''
     }
@@ -20,10 +20,11 @@ export const AddTask = ({projectID=-1, onNewTask = f=>f}) => {
             <input ref={(input) => description = input } type="text" placeholder="Description"/>
             <select ref={(select) => option = select}>
                 <option disabled>Choose status</option>
-                <option>{TASK_STATUS.WAITING}</option>
-                <option>{TASK_STATUS.IMPLEMENTATION}</option>
-                <option>{TASK_STATUS.VERIFYING}</option>
-                <option>{TASK_STATUS.RELEASING}</option>
+                {
+                    TASK_STATUS_ARRAY.map(item =>
+                        <option>{item}</option>
+                    )
+                }
             </select>
             <button>Add Task</button>
         </form>

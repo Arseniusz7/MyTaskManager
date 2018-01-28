@@ -2,7 +2,10 @@ import { compose } from 'redux'
 import {FILTERS_DEVELOPER} from './../constants'
 
 export const findBy_id = (items, id) =>
-    items.filter(item => item._id === id)
+    (items) ?
+        items.filter(item => item._id === id) :
+        []
+
 
 export const selectItem = (items=[]) => {
     if(items.length !== 0)

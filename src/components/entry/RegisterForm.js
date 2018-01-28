@@ -56,22 +56,26 @@ export class RegisterFormForRedirect extends Component  {
         onRegister: f=>f
     }
 
-    componentDidUpdate() {
+    /*componentDidUpdate() {
         let {user, history} = this.props
         if(user.auth === MESSAGES.SUCCESS)
             history.push(URLS.APP)
-    }
+    }*/
 
     // some toasts will be nice
 
     render() {
         let {user, onRegister} = this.props
         let register = [<RegisterForm key={0} onRegister={onRegister}/>, <BackToLogin key={1}/>]
-        if(user.auth === MESSAGES.REGISTER_ERROR) {
-            console.log(MESSAGES.REGISTER_ERROR)
-            return register
-        } else {
-            return register
+        switch (user.auth) {
+            case MESSAGES.EMAIL_SENT:
+                console.log(MESSAGES.EMAIL_SENT)
+                return register
+            case MESSAGES.REGISTER_ERROR:
+                console.log(MESSAGES.REGISTER_ERROR)
+                return register
+            default:
+                return register
         }
     }
 }

@@ -3,6 +3,7 @@ import {projects} from './projectReducers'
 import {user} from './userReducers'
 import {developers} from './developerReducers'
 import {taskFilter} from './taskFilterReducers'
+import {show_id} from './show_idReducer'
 import thunk from 'redux-thunk'
 
 const clientLogger = store => next => action => {
@@ -34,7 +35,7 @@ const middleware = server => [
 
 const storeFactory = (server = false, initialState = {}) =>
     applyMiddleware(...middleware(server))(createStore)(
-        combineReducers({projects, user, developers, taskFilter}),
+        combineReducers({projects, user, developers, taskFilter, show_id}),
         initialState
     )
 

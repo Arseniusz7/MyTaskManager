@@ -10,8 +10,7 @@ import {authSuccess} from './serverActions/serverActions'
 import {htmlResponse} from './htmlResponse'
 import storeFactory from '../store'
 import initialState from '../../data/initialState.json'
-import {URLS, SESSION_SECRET, ROLES, DB_CONNECTION} from './../constants'
-import {getDeveloperProjectsDB, getManagerProjectsDB} from './data/data'
+import {URLS, SESSION_SECRET, DB_CONNECTION} from './../constants'
 
 const fileAssets = express.static(path.join(__dirname, '../../dist/assets'))
 
@@ -34,7 +33,7 @@ db.once('open', function(){
 const redirectUnauth = (req, res) =>
     (req.url !== '/' && req.url !== URLS.REGISTER && req.url !== URLS.LOGIN) ?
         res.redirect(303, '/') :
-        res.status(200).send(htmlResponse(req))
+        res.status(200).send(htmlResponse(req.server))
 
 
 const respond = (req, res, next) =>
@@ -44,7 +43,7 @@ const respond = (req, res, next) =>
 
 const Authorize = (req, res, next) => {
     let { id, role } = req.session.passport.user
-    req.store.dispatch(authSuccess(id, role))
+    req.server.store.dispatch(authSuccess(id, role))
     next()
 }
 
@@ -63,7 +62,10 @@ const logger = (req, res, next) => {
 }
 
 const addStoreToRequestPipeline = (req, res, next) => {
-    req.store = storeFactory(true, initialState)
+    req.server = {
+        store: storeFactory(true, initialState),
+        url: req.url
+    }
     next()
 }
 

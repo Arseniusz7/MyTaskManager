@@ -12,6 +12,11 @@ export const user = (state={}, action={type: null}) => {
                 role: action.role,
                 messageDetails: action.messageDetails
             }
+        case ACTIONS.EMAIL_SENT:
+            return {
+                ...state,
+                auth: action.type
+            }
         default:
             return state
     }

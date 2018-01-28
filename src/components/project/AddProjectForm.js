@@ -1,5 +1,5 @@
 
-export const ProjectForm = ({onNewProject = f=>f}) => {
+export const AddProjectForm = ({onNewProject = f=>f}) => {
     let title
     let description
 
