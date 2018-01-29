@@ -1,6 +1,4 @@
-/**
- * project colors
- */
+
 import {Component} from 'react'
 import {MESSAGES, URLS} from './../../constants'
 import {IsNewAccount} from './IsNewAccount'

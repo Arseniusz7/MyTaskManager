@@ -1,6 +1,3 @@
-/**
- * project colors
- */
 import ACTIONS from '../constants'
 
 export const user = (state={}, action={type: null}) => {

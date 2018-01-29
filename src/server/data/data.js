@@ -3,7 +3,8 @@ import Task from '../entities/Task'
 import User from '../entities/User'
 import Comment from '../entities/Comment'
 import {addProject, addProjects, addTask, addTasks, addDevelopers, updateStatusTasks,
-    addComment, addComments, deleteComment, updateComment, updateDeveloperTasks } from './../serverActions/serverActions'
+    addComment, addComments, deleteComment, updateComment, updateDeveloperTasks,
+    devAddedToProject, devIsNotInProject} from './../serverActions/serverActions'
 import dispatchAndRespond from '../dispatchAndRespond'
 import {ROLES} from './../../constants'
 
@@ -28,7 +29,7 @@ export const addDeveloperToProjectDB = (res, projectID, developerID, server) =>
         { _id: projectID },
         { $addToSet: {developers: developerID } }
     )
-        .then(dumbSuccess)
+        .then(dispatchAndRespond(res, devAddedToProject(), server))
         .catch(dumbCatch)
 
 export const addDeveloperToTaskDB = (res, taskID, projectID, developer, server) =>
@@ -40,7 +41,7 @@ export const addDeveloperToTaskDB = (res, taskID, projectID, developer, server) 
                 )
                 .then(() => dispatchAndRespond(res, updateDeveloperTasks(developer, taskID, projectID), server))
                 .catch(dumbCatch)
-            : dumbCatch("not in the project")
+            : dispatchAndRespond(res, devIsNotInProject(), server)
         )
         .catch(dumbCatch)
 

@@ -1,6 +1,4 @@
-/**
- * project colors
- */
+
 import { Router } from 'express'
 import User from '../entities/User'
 import TempUser from '../entities/TempUser'

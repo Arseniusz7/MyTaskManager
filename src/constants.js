@@ -25,6 +25,8 @@ export const ACTIONS = {
     // developer
     ADD_DEVELOPER: "ADD_DEVELOPER",
     ADD_DEVELOPERS: "ADD_DEVELOPERS",
+    DEVELOPER_ADDED_TO_PROJECT: "DEVELOPER_ADDED_TO_PROJECT",
+    DEVELOPER_IS_NOT_IN_PROJECT: "DEVELOPER_IS_NOT_IN_PROJECT",
     // user
     AUTHENTICATION: "AUTHENTICATION",
     EMAIL_SENT: "EMAIL_SENT",
@@ -46,6 +48,8 @@ export const MESSAGES = {
     REGISTER_ERROR: "REGISTER_ERROR",
     LOGIN_ERROR: "LOGIN_ERROR",
     LOGOUT_ERROR: "LOGOUT_ERROR",
+    DEVELOPER_ADDED_TO_PROJECT: "Developer is added to the project.",
+    DEVELOPER_IS_NOT_IN_PROJECT: "Developer doesn't participate in this project!",
     USED_EMAIL_ERROR: "This email is already used.",
     SEND_MESSAGE_ERROR: "Can't send confirmation message on your email.",
     LOGIN_ERROR_DETAILS: "Wrong password or username!"

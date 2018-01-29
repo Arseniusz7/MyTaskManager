@@ -1,6 +1,4 @@
-/**
- * project colors
- */
+
 import ACTIONS, {MESSAGES, ROLES, ANONYMOUS_ID} from '../../constants'
 
 
@@ -14,6 +12,14 @@ export const authError = (err, auth=MESSAGES.LOGIN_ERROR) => ({
 
 export const emailSent = () => ({
     type: ACTIONS.EMAIL_SENT
+})
+
+export const devAddedToProject = () => ({
+    type: ACTIONS.DEVELOPER_ADDED_TO_PROJECT
+})
+
+export const devIsNotInProject = () => ({
+    type: ACTIONS.DEVELOPER_IS_NOT_IN_PROJECT
 })
 
 export const authSuccess = (_id, role) => ({

@@ -2,6 +2,7 @@ import { Route, Switch, Redirect, NavLink } from 'react-router-dom'
 import {Manager, LoadProjects, Tasks, ManagerTasks, TaskDetailsContainer} from './containersProject'
 import {Register, Login} from './containersEntry'
 import {URLS, ROLES} from './../constants'
+import {ToastContainer} from 'react-toastify'
 import Tie from 'react-icons/lib/fa/black-tie'
 import '../stylesheets/bootstrap.scss'
 import '../stylesheets/custom.scss'
@@ -21,6 +22,7 @@ export class MainApp extends Component {
             <div>
                 <a href={URLS.LOGOUT}>Log out</a>
                 <h4>Welcome {user.role}</h4>
+                <ToastContainer/>
                 {
                     (user.role === ROLES.MANAGER)
                         ? (location.pathname === URLS.APP_MANAGER)

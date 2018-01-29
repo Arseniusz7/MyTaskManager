@@ -1,6 +1,4 @@
-/**
- * project colors
- */
+
 import mongoose from 'mongoose'
 
 let TaskSchema = new mongoose.Schema({

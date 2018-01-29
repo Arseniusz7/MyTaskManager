@@ -1,6 +1,4 @@
-/**
- * project colors
- */
+
 import { NavLink as Link } from 'react-router-dom'
 import {URLS} from './../../constants'
 

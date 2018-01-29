@@ -3,5 +3,6 @@
   "projects":[],
   "developers":[],
   "taskFilter":{"taskFilter":"NONE", "keyFilter":"-1"},
-  "show_id":{"replyComment":"-1", "editComment":"-1", "findDev":"-1", "changeStatusTask":"-1", "addProject":"-1", "newTask":"-1"}
+  "show_id":{"replyComment":"-1", "editComment":"-1", "findDev":"-1", "changeStatusTask":"-1", "addProject":"-1", "newTask":"-1"},
+  "message":""
 }
