@@ -6,7 +6,6 @@ import {ProjectListLoad} from './project/ProjectList'
 import {AddTask} from './project/AddTask'
 import {TaskListLoad, TaskListManagerLoad} from './project/TaskList'
 import {DeveloperList, TaskDeveloperList} from './project/DeveloperList'
-import {Task} from './project/Task'
 import {AddProjectForm} from './project/AddProjectForm'
 import {MyTaskFilter} from './project/filters/MyTasksFilter'
 import {DeveloperFilters} from './project/filters/DeveloperFilters'
@@ -160,11 +159,6 @@ export const SearchDevelopers = connect(
         })
 
 )(SearchDevelopersForm)
-
-export const TaskContainer = connect(
-    null,
-    null
-)(Task)
 
 export const Developers = connect(
     ({developers, show_id}) => ({developers, show_id}),

@@ -4,7 +4,7 @@ import {Developers, ShowFindDevContainer, ShowNewProjectContainer} from '../cont
 export const ManagerProjects =({projects}) =>
     <div>
         <ShowNewProjectContainer/>
-        <h1>Your Projects:</h1>
+        <h4>Your Projects:</h4>
         { projects.map((project) =>
             <div>
                 <ManagerProject key={project._id} project={project}/>

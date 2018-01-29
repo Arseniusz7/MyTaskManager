@@ -2,6 +2,9 @@ import { Route, Switch, Redirect, NavLink } from 'react-router-dom'
 import {Manager, LoadProjects, Tasks, ManagerTasks, TaskDetailsContainer} from './containersProject'
 import {Register, Login} from './containersEntry'
 import {URLS, ROLES} from './../constants'
+import Tie from 'react-icons/lib/fa/black-tie'
+import '../stylesheets/bootstrap.scss'
+import '../stylesheets/custom.scss'
 
 import {Component} from 'react'
 
@@ -17,12 +20,12 @@ export class MainApp extends Component {
         return (
             <div>
                 <a href={URLS.LOGOUT}>Log out</a>
-                <p>Welcome {user.role}</p>
+                <h4>Welcome {user.role}</h4>
                 {
                     (user.role === ROLES.MANAGER)
                         ? (location.pathname === URLS.APP_MANAGER)
                             ? <NavLink to={URLS.APP}>Go back to projects</NavLink>
-                            : <NavLink to={URLS.APP_MANAGER}>Go to manager panel</NavLink>
+                            : <NavLink to={URLS.APP_MANAGER}><Tie/> Go to manager panel</NavLink>
                     : null
                 }
                 <Route path={`${URLS.APP}/:id${URLS.TASK}/:task_id`} component={TaskDetailsContainer}/>
@@ -42,11 +45,15 @@ export const IsAuthorize = connect(
 )(MainApp)
 
 const App = () =>
-    <Switch>
-        <Route path={URLS.APP} component={IsAuthorize} />
-        <Redirect from={URLS.LOGIN} to="/"/>
-        <Route path={URLS.REGISTER} component={Register}/>
-        <Route exact path="/" component={Login}/>
-    </Switch>
+    <div className="container">
+        <div className="row">
+            <Switch>
+                <Route path={URLS.APP} component={IsAuthorize} />
+                <Redirect from={URLS.LOGIN} to="/"/>
+                <Route path={URLS.REGISTER} component={Register}/>
+                <Route exact path="/" component={Login}/>
+            </Switch>
+        </div>
+    </div>
 
 export default App

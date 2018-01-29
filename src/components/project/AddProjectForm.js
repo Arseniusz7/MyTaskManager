@@ -13,9 +13,13 @@ export const AddProjectForm = ({onNewProject = f=>f}) => {
     return (
         <form onSubmit={submit}>
             <h3>Create new project</h3>
-            <input ref={(input) => title = input } type="text" placeholder="Title" required/>
-            <input ref={(input) => description = input } type="text" placeholder="Description"/>
-            <button>Add project</button>
+            <div>
+                <input ref={(input) => title = input } type="text" placeholder="Title" required/>
+            </div>
+            <div>
+                <textarea ref={(input) => description = input } type="text" placeholder="Description"/>
+            </div>
+            <button className="btn btn-primary">Add project</button>
         </form>
     )
 }

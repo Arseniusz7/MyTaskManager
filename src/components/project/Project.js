@@ -5,7 +5,7 @@ import {NavLink} from 'react-router-dom'
 
 export const ProjectDetails = ({_id, title, description, children}) =>
     <div id={_id}>
-        <h2>{title}</h2>
+        <h1>{title}</h1>
         <p>{description}</p>
         { children }
     </div>

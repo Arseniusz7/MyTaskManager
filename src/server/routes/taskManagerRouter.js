@@ -73,7 +73,7 @@ router.post(URLS.DEVELOPER, (req, res) => {
 
 router.post(URLS.DEVELOPER_TASK, (req, res) => {
     if(req.session.passport.user.role === ROLES.MANAGER) {
-        addDeveloperToTaskDB(res, req.body.taskID, req.body.projectID, req.body.developerID)
+        addDeveloperToTaskDB(res, req.body.taskID, req.body.projectID, req.body.developer)
     } else {
         permissionError()
     }

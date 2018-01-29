@@ -3,7 +3,7 @@ import Task from '../entities/Task'
 import User from '../entities/User'
 import Comment from '../entities/Comment'
 import {addProject, addProjects, addTask, addTasks, addDevelopers, updateStatusTasks,
-    addComment, addComments, deleteComment, updateComment } from './../serverActions/serverActions'
+    addComment, addComments, deleteComment, updateComment, updateDeveloperTasks } from './../serverActions/serverActions'
 import dispatchAndRespond from '../dispatchAndRespond'
 import {ROLES} from './../../constants'
 
@@ -31,14 +31,14 @@ export const addDeveloperToProjectDB = (res, projectID, developerID, server) =>
         .then(dumbSuccess)
         .catch(dumbCatch)
 
-export const addDeveloperToTaskDB = (res, taskID, projectID, developerID, server) =>
+export const addDeveloperToTaskDB = (res, taskID, projectID, developer, server) =>
     Project.findById(projectID)
-        .then(projects => (projects.length !== 0) ?
+        .then(projects => (projects.developers.indexOf(developer._id) !== -1) ?
                 Task.update(
                 { _id: taskID },
-                { $set: {developer: developerID } }
+                { $set: {developer: developer._id } }
                 )
-                .then(dumbSuccess)
+                .then(() => dispatchAndRespond(res, updateDeveloperTasks(developer, taskID, projectID), server))
                 .catch(dumbCatch)
             : dumbCatch("not in the project")
         )
@@ -114,7 +114,7 @@ export const addTaskDB = (res, task, server) =>
 
 export const getTasksDB = (res, id, server) =>
     Project.findById(id)
-        .populate({ path: 'tasks', select: '-comments' })
+        .populate({ path: 'tasks', select: '-comments', populate: { path: 'developer' } })
         .exec()
         .then(project => dispatchAndRespond(res, addTasks(project.tasks, id), server))
         .catch(dumbCatch)
@@ -139,21 +139,21 @@ export const updateTaskStatusDB = (res, status, taskID, projectID, server) =>
 
 export const getManagerProjectsAndTasksDB = (res, managerID, projectID, server) =>
     Project.find({ manager : managerID})
-        .populate({ path: 'tasks', match: {project: projectID}, select: '-comments' })
+        .populate({ path: 'tasks', match: {project: projectID}, select: '-comments', populate: { path: 'developer' } })
         .then(projects => dispatchAndRespond(res, addProjects(projects), server))
         .catch(dumbCatch)
 
 
 export const getDeveloperProjectsAndTasksDB = (res, devID, projectID, server) =>
     Project.find({ developers : devID})
-        .populate({ path: 'tasks', match: {project: projectID}, select: '-comments'})
+        .populate({ path: 'tasks', match: {project: projectID}, select: '-comments', populate: { path: 'developer' }})
         .then(projects => dispatchAndRespond(res, addProjects(projects), server))
         .catch(dumbCatch)
 
 export const getManagerProjectsTasksCommentsDB = (res, managerID, projectID, taskID, server) =>
     Project.find({ manager : managerID})
         .populate({ path: 'tasks', match: {project: projectID},
-            populate: { path: 'comments', match: {task: taskID}} })
+            populate: [{ path: 'comments', match: {task: taskID}}, { path: 'developer' }] })
         .then(projects => dispatchAndRespond(res, addProjects(projects), server))
         .catch(dumbCatch)
 
@@ -161,7 +161,7 @@ export const getManagerProjectsTasksCommentsDB = (res, managerID, projectID, tas
 export const getDeveloperProjectsTasksCommentsDB = (res, devID, projectID, taskID, server) =>
     Project.find({ developers : devID})
         .populate({ path: 'tasks', match: {project: projectID},
-            populate: { path: 'comments', match: {task: taskID}} })
+            populate: [{ path: 'comments', match: {task: taskID}}, { path: 'developer' }] })
         .then(projects => dispatchAndRespond(res, addProjects(projects), server))
         .catch(dumbCatch)
 

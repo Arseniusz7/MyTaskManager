@@ -48,7 +48,7 @@ export const authorizationSuccess = (res, {_id, role}) => {
 }
 
 
-const hashUrl= function(length=16){
+export const hashUrl = (length=16) => {
     const Chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
     let hashInit = ''
     return [... new Array(length)].reduce((arg) => {
@@ -74,11 +74,11 @@ router.post(URLS.REGISTER,
         }
         tempUser.save(function(err) {
             return err
-                ? registerError(res, err)
+                ? registerError(res, MESSAGES.USED_EMAIL_ERROR)
                 : transporter.sendMail(mailOptions, function(error, info){
                     if (error) {
                         console.log(error)
-                        registerError(res, error)
+                        registerError(res, MESSAGES.SEND_MESSAGE_ERROR)
                     } else {
                         console.log(info)
                         dispatchAndRespond(res, emailSent());
@@ -120,12 +120,12 @@ router.post(URLS.LOGIN,
         passport.authenticate('local',
             function(err, user) {
                 return err
-                    ? loginError(res, err)
+                    ? loginError(res, MESSAGES.LOGIN_ERROR_DETAILS)
                     : req.logIn(user, function(err) {
                         if(user)
                             authorizationSuccess(res, user)
                         else
-                            loginError(res, err)
+                            loginError(res, MESSAGES.LOGIN_ERROR_DETAILS)
                     });
             }
         )(req, res, next);

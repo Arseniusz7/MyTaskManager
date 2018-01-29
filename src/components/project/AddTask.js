@@ -16,17 +16,26 @@ export const AddTask = ({projectID=-1, onNewTask = f=>f}) => {
     return (
         <form onSubmit={submit}>
             <h3>Create new Task</h3>
-            <input ref={(input) => title = input } type="text" placeholder="Title" required/>
-            <input ref={(input) => description = input } type="text" placeholder="Description"/>
-            <select ref={(select) => option = select}>
-                <option disabled>Choose status</option>
-                {
-                    TASK_STATUS_ARRAY.map(item =>
-                        <option>{item}</option>
-                    )
-                }
-            </select>
-            <button>Add Task</button>
+            <div>
+                <input ref={(input) => title = input } type="text" placeholder="Title" required/>
+            </div>
+            <div>
+                <span>
+                    <span>Status: </span>
+                    <select ref={(select) => option = select}>
+                        <option disabled>Choose status</option>
+                        {
+                            TASK_STATUS_ARRAY.map(item =>
+                                <option>{item}</option>
+                            )
+                        }
+                    </select>
+                </span>
+            </div>
+            <div>
+                <input ref={(input) => description = input } type="text" placeholder="Description"/>
+            </div>
+            <button className="btn btn-primary">Add Task</button>
         </form>
     )
 }

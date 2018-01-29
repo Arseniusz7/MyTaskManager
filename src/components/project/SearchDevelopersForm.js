@@ -13,9 +13,13 @@ export const SearchDevelopersForm = ({id, onFind=f=>f}) => {
     return (
         <form onSubmit={submit}>
             <h3>Find developer</h3>
-            <input ref={(input) => firstName = input } type="text" placeholder="First Name"/>
-            <input ref={(input) => lastName = input } type="text" placeholder="Last Name"/>
-            <button>Find</button>
+            <div>
+                <input ref={(input) => firstName = input } type="text" placeholder="First Name"/>
+            </div>
+            <div>
+                <input ref={(input) => lastName = input } type="text" placeholder="Last Name"/>
+            </div>
+            <button className="btn btn-primary">Find</button>
         </form>
     )
 }

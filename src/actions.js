@@ -95,12 +95,12 @@ export const addDeveloperToProject = (projectID, developerID) => dispatch =>
         JSON.stringify({projectID, developerID})
     )
 
-export const addDeveloperToTask = (taskID, projectID, developerID) => dispatch =>
+export const addDeveloperToTask = (taskID, projectID, developer) => dispatch =>
     fetchThenDispatch(
         dispatch,
         URLS.DEVELOPER_TASK,
         HTTP.POST,
-        JSON.stringify({taskID, projectID, developerID})
+        JSON.stringify({taskID, projectID, developer})
     )
 
 

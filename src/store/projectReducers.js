@@ -60,6 +60,13 @@ export const task = (state = {}, action={type: null}) => {
                     ...state,
                     status: action.status
                 }
+        case ACTIONS.UPDATE_TASK_DEVELOPER:
+            return (state._id !== action.taskID) ?
+                state :
+                {
+                    ...state,
+                    developer: action.developer
+                }
         case ACTIONS.ADD_COMMENTS:
             return (state._id !== action.taskID) ?
                 state :
@@ -90,6 +97,7 @@ export const tasks = (state = [], action={type: null}) => {
                 task({}, action)
             ]
         case ACTIONS.UPDATE_TASK_STATUS:
+        case ACTIONS.UPDATE_TASK_DEVELOPER:
         case ACTIONS.ADD_COMMENT:
         case ACTIONS.ADD_COMMENTS:
         case ACTIONS.DELETE_COMMENT:
@@ -120,6 +128,7 @@ export const project = (state = {}, action={type: null}) => {
                 }
         case ACTIONS.ADD_TASK:
         case ACTIONS.UPDATE_TASK_STATUS:
+        case ACTIONS.UPDATE_TASK_DEVELOPER:
         case ACTIONS.ADD_COMMENT:
         case ACTIONS.ADD_COMMENTS:
         case ACTIONS.DELETE_COMMENT:
@@ -147,6 +156,7 @@ export const projects = (state=[], action={type: null}) => {
         case ACTIONS.ADD_TASK:
         case ACTIONS.ADD_TASKS:
         case ACTIONS.UPDATE_TASK_STATUS:
+        case ACTIONS.UPDATE_TASK_DEVELOPER:
         case ACTIONS.ADD_COMMENT:
         case ACTIONS.ADD_COMMENTS:
         case ACTIONS.DELETE_COMMENT:

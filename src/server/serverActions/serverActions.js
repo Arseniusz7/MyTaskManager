@@ -88,6 +88,13 @@ export const updateStatusTasks = (status, taskID, projectID) => ({
     status: status
 })
 
+export const updateDeveloperTasks = (developer, taskID, projectID) => ({
+    id: projectID,
+    type: ACTIONS.UPDATE_TASK_DEVELOPER,
+    taskID: taskID,
+    developer: developer
+})
+
 export const addProjects = (projects) => ({
     type: ACTIONS.ADD_PROJECTS,
     projects: projects

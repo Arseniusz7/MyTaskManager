@@ -14,6 +14,7 @@ export class CommentList extends Component {
         if(comments)
             return (
                 <div>
+                    <h4>Comments: </h4>
                     {comments.map(comment =>
                         <CommentContainer key={comment._id} userID={userID} projectID={match.params.id} {...comment}/>)}
                 </div>)

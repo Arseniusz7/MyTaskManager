@@ -4,6 +4,7 @@
 import {Component} from 'react'
 import {MESSAGES, URLS} from './../../constants'
 import {IsNewAccount} from './IsNewAccount'
+import {toast, ToastContainer} from 'react-toastify'
 
 export const LoginForm = ({onLogin=f=>f}) => {
     let email
@@ -21,14 +22,12 @@ export const LoginForm = ({onLogin=f=>f}) => {
             <h4>Log in</h4>
             <form onSubmit={submit}>
                 <div>
-                    <label htmlFor="email">Email</label>
                     <input ref={(input) => email = input} type="email" name="email" placeholder="Your Email"/>
                 </div>
                 <div>
-                    <label htmlFor="password">Password</label>
                     <input ref={(input) => password = input} type="password" name="password" placeholder="Your Password"/>
                 </div>
-                <input type="submit" value="Log in"/>
+                <button className="btn btn-primary">Log in</button>
             </form>
         </div>)
 
@@ -53,8 +52,10 @@ export class LoginFormForRedirect extends Component  {
         let {user, onLogin} = this.props
         let login = [<LoginForm key={0} onLogin={onLogin}/>, <IsNewAccount key={1}/>]
         if(user.auth === MESSAGES.LOGIN_ERROR) {
-            console.log(MESSAGES.LOGIN_ERROR)
-            return login
+            toast.error(user.messageDetails, {
+                position: toast.POSITION.BOTTOM_LEFT
+            })
+            return [...login, <ToastContainer key={login.length}/>]
         } else {
             return login
         }

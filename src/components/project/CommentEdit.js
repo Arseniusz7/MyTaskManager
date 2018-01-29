@@ -8,8 +8,10 @@ export const CommentEdit = ({ text, _id, author, taskID, projectID, onEdit=f=>f}
 
     return (
         <form onSubmit={submit}>
-            <input ref={(input) => editText = input } defaultValue={text} type="text" placeholder="Edit comment here"/>
-            <button>Edit</button>
+            <div>
+                <textarea ref={(input) => editText = input } defaultValue={text} type="text" placeholder="Edit comment here"/>
+            </div>
+            <button className="btn btn-primary">Edit</button>
         </form>
     )
 }

@@ -10,6 +10,7 @@ export const ACTIONS = {
     ADD_TASK: "ADD_TASK",
     ADD_TASKS: "ADD_TASKS",
     UPDATE_TASK_STATUS: "UPDATE_TASK_STATUS",
+    UPDATE_TASK_DEVELOPER: "UPDATE_TASK_DEVELOPER",
     ADD_COMMENT: "ADD_COMMENT",
     ADD_COMMENTS: "ADD_COMMENTS",
     DELETE_COMMENT: "DELETE_COMMENT",
@@ -44,7 +45,10 @@ export const MESSAGES = {
     ANONYMOUS: "ANONYMOUS",
     REGISTER_ERROR: "REGISTER_ERROR",
     LOGIN_ERROR: "LOGIN_ERROR",
-    LOGOUT_ERROR: "LOGOUT_ERROR"
+    LOGOUT_ERROR: "LOGOUT_ERROR",
+    USED_EMAIL_ERROR: "This email is already used.",
+    SEND_MESSAGE_ERROR: "Can't send confirmation message on your email.",
+    LOGIN_ERROR_DETAILS: "Wrong password or username!"
 }
 
 export const URLS = {

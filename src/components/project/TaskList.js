@@ -1,6 +1,7 @@
 import {Component} from 'react'
 import {NavLink} from 'react-router-dom'
-import {ShowNewTaskContainer, DevFilters, ShowFindDevContainer, DevelopersTask, Developers, TaskContainer} from '../containersProject'
+import {ShowNewTaskContainer, DevFilters, ShowFindDevContainer, DevelopersTask, Developers} from '../containersProject'
+import {Task} from './Task'
 import {URLS} from './../../constants'
 
 import {ProjectDetails} from './Project'
@@ -8,20 +9,21 @@ import {ProjectDetails} from './Project'
 export const TaskListHeader = ({projectID}) =>
     <div>
         <ShowNewTaskContainer projectID={projectID}/>
-        <h3>Tasks:</h3>
+        <h4>Tasks:</h4>
     </div>
 
 export const TaskListDev = ({project, tasks }) =>
     <div>
         <NavLink to={URLS.APP}>Go back to projects</NavLink>
-        <h1>Project:</h1>
+        <h4>Project:</h4>
         <ProjectDetails {...project}/>
+        <DevFilters/>
         <div>
             <TaskListHeader projectID={project._id}/>
             {
                 tasks.map(task =>
                     <div>
-                        <TaskContainer key={task._id} {...task}/>
+                        <Task key={task._id} {...task}/>
                         <NavLink to={`${URLS.APP}/${project._id}${URLS.TASK}/${task._id}`}>
                             Go to tasks details
                         </NavLink>
@@ -29,13 +31,12 @@ export const TaskListDev = ({project, tasks }) =>
                 )
             }
         </div>
-        <DevFilters/>
     </div>
 
 export const TaskListManager = ({project, tasks }) =>
     <div>
         <NavLink to={URLS.APP}>Go back to projects</NavLink>
-        <h1>Project:</h1>
+        <h4>Project:</h4>
         <ProjectDetails {...project}>
             <ShowFindDevContainer _id={project._id}/>
             <Developers projectID={project._id}/>
@@ -45,12 +46,12 @@ export const TaskListManager = ({project, tasks }) =>
             {
                 tasks.map(task =>
                     <div>
-                        <TaskContainer key={task._id} {...task}/>
+                        <Task key={task._id} {...task}/>
+                        <ShowFindDevContainer _id={task._id}/>
+                        <DevelopersTask taskID={task._id} projectID={project._id}/>
                         <NavLink to={`${URLS.APP}/${project._id}${URLS.TASK}/${task._id}`}>
                             Go to tasks details
                         </NavLink>
-                        <ShowFindDevContainer _id={task._id}/>
-                        <DevelopersTask taskID={task._id} projectID={project._id}/>
                     </div>
                 )
             }

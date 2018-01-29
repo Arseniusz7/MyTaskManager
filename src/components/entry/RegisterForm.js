@@ -1,7 +1,8 @@
 
 import {Component} from 'react'
 import {BackToLogin} from './IsNewAccount'
-import {MESSAGES, URLS} from './../../constants'
+import {MESSAGES} from './../../constants'
+import {toast, ToastContainer} from 'react-toastify'
 
 const RegisterForm = ({onRegister=f=>f}) => {
     let email
@@ -25,26 +26,22 @@ const RegisterForm = ({onRegister=f=>f}) => {
             <h4>Register your account</h4>
             <form onSubmit={submit}>
                 <div>
-                    <label htmlFor="email">Email</label>
                     <input ref={(input) => email = input} type="email" placeholder="Your Email"/>
                 </div>
                 <div>
-                    <label htmlFor="password">Password</label>
                     <input ref={(input) => password = input} type="password" placeholder="Your Password"/>
                 </div>
                 <div>
-                    <label htmlFor="firstName">First name</label>
                     <input ref={(input) => firstName = input} type="text" placeholder="Your first name"/>
                 </div>
                 <div>
-                    <label htmlFor="lastName">Last name</label>
                     <input ref={(input) => lastName = input} type="text" placeholder="Your last name"/>
                 </div>
                 <div>
-                    <input ref={(input) => manager = input} type="checkbox" value="true"/>
-                    <label htmlFor="manager">Are you manager?</label>
+                    <input className="register_checkbox" ref={(input) => manager = input} type="checkbox" value="true"/>
+                    <label htmlFor="manager"> Are you manager?</label>
                 </div>
-                <button>Register</button>
+                <button className="btn btn-primary">Register</button>
             </form>
         </div>)
 }
@@ -55,13 +52,6 @@ export class RegisterFormForRedirect extends Component  {
         user: { auth: null },
         onRegister: f=>f
     }
-
-    /*componentDidUpdate() {
-        let {user, history} = this.props
-        if(user.auth === MESSAGES.SUCCESS)
-            history.push(URLS.APP)
-    }*/
-
     // some toasts will be nice
 
     render() {
@@ -69,11 +59,15 @@ export class RegisterFormForRedirect extends Component  {
         let register = [<RegisterForm key={0} onRegister={onRegister}/>, <BackToLogin key={1}/>]
         switch (user.auth) {
             case MESSAGES.EMAIL_SENT:
-                console.log(MESSAGES.EMAIL_SENT)
-                return register
+                toast.success("Check your email, please. Confirmation message is sent.", {
+                    position: toast.POSITION.BOTTOM_LEFT
+                })
+                return [...register, <ToastContainer key={register.length}/>]
             case MESSAGES.REGISTER_ERROR:
-                console.log(MESSAGES.REGISTER_ERROR)
-                return register
+                toast.error(user.messageDetails, {
+                    position: toast.POSITION.BOTTOM_LEFT
+                })
+                return [...register, <ToastContainer key={register.length}/>]
             default:
                 return register
         }

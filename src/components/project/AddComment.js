@@ -10,9 +10,9 @@ export const AddComment = ({userID, taskID, projectID, onReply=f=>f}) => {
     return (
         <form onSubmit={submit}>
             <div>
-                <input ref={(input) => text = input } type="text" placeholder="Leave comment here"/>
+                <textarea ref={(input) => text = input } type="text" placeholder="Leave comment here"/>
             </div>
-            <button>Reply</button>
+            <button className="btn btn-primary">Reply</button>
         </form>
     )
 

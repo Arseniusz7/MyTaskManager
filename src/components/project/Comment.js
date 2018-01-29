@@ -3,7 +3,6 @@ import {ShowCommentEditContainer} from '../containersProject'
 
 export const CommentBasic = ({_id, text, timestamp, children}) =>
     <div id={_id}>
-        <h3>Comment: </h3>
         <p>{text}</p>
         <TimeAgo timestamp={timestamp}/>
         {children}

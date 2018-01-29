@@ -4,7 +4,7 @@ import {Project} from './Project'
 
 export const ProjectList = ({projects}) =>
     <div>
-        <h1>Your Projects:</h1>
+        <h4>Your Projects:</h4>
         { projects.map((project) =>
             <Project key={project._id} project={project}/>)
         }
